@@ -12,6 +12,7 @@
 typedef unsigned long bitarray_t[];
 typedef unsigned long bitarray_index_t;
 
+
 //pomocne makrko na vypocet velikosti pole
 #define BITARRAY_BLOCKS(velikost) (((velikost) + (sizeof(unsigned long) * CHAR_BIT) - 1) / (sizeof(unsigned long) * CHAR_BIT) + 1)
 
@@ -34,6 +35,27 @@ typedef unsigned long bitarray_index_t;
 //free
 #define bitarray_free(jmeno_pole) free(jmeno_pole)
 
+#ifdef USE_INLINE
+
+inline unsigned long bitarray_size(bitarray_t jmeno_pole){
+    return jmeno_pole[0];
+    }
+inline void bitarray_fill(bitarray_t jmeno_pole, int bool_vyraz) {
+    unsigned long pocet_bunek = BITARRAY_BLOCKS(bitarray_size(jmeno_pole));
+    for(unsigned long i = 1; i<=pocet_bunek; i++) {
+        if(bool_vyraz) {
+            jmeno_pole[i] = ULONG_MAX;
+        }
+        else {
+            jmeo_pole[i] = 0UL;
+        }
+    }
+}
+
+inline void
+
+#else
+
 //size
 #define bitarray_size(jmeno_pole) jmeno_pole[0]
 
@@ -46,27 +68,56 @@ typedef unsigned long bitarray_index_t;
         }\
     } while(0)
 
-//nastavi bit na 0 nebo 1
-#define bitarray_setbit(jmeno_pole, index, bool_vyraz)
+//nastavi bit na 0 nebo 1, check, no_check
+// Nastaví bit na zadaném indexu na hodnotu bool_vyraz (0=false, cokoliv jineho=true)
+#ifndef NO_CHECK
+    #define bitarray_setbit(jmeno_pole, index, bool_vyraz) \
+        do { \
+            if ((index) >= bitarray_size(jmeno_pole)) { \
+                error_exit("bitarray_setbit: Index %lu mimo rozsah 0..%lu", \
+                           (unsigned long)(index), \
+                           (unsigned long)(bitarray_size(jmeno_pole) - 1)); \
+            } \
+            if (bool_vyraz) { \
+                jmeno_pole[((index) / (sizeof(unsigned long) * CHAR_BIT)) + 1] |= \
+                (1UL << ((index) % (sizeof(unsigned long) * CHAR_BIT))); \
+            } else { \
+                jmeno_pole[((index) / (sizeof(unsigned long) * CHAR_BIT)) + 1] &= \
+                ~(1UL << ((index) % (sizeof(unsigned long) * CHAR_BIT))); \
+            } \
+        } while(0)
+#else
+    #define bitarray_setbit(jmeno_pole, index, bool_vyraz) \
+        do { \
+            if (bool_vyraz) { \
+                jmeno_pole[((index) / (sizeof(unsigned long) * CHAR_BIT)) + 1] |= \
+                (1UL << ((index) % (sizeof(unsigned long) * CHAR_BIT))); \
+            } else { \
+                jmeno_pole[((index) / (sizeof(unsigned long) * CHAR_BIT)) + 1] &= \
+                ~(1UL << ((index) % (sizeof(unsigned long) * CHAR_BIT))); \
+            } \
+        } while(0)
+#endif
 
-
-//vrati hodontu bitu check, no check
+//vrati hodontu bitu check, no_check
 #ifndef NO_CHECK
 
 //musime pouzit operator carka
-#define bitarray_getbit(jmeno_pole, index) \
-    (index >= bitarray_size(jmeno_pole)) ? \
-    (error_exit("bitarray_getbit: Index %lu mimo rozsah 0..%lu",(unsigned long)(index), (unsigned long) (bitarray_size(jmeno_pole)-1)),0): 0 \
-    (jmeno_pole[((index)/(sizeof(unsigned long) * CHAR_BIT)) + 1] & \
-    (1UL << ((index) % (sizeof(unsigned long) * CHAR_BIT)))) != 0
-
+    #define bitarray_getbit(jmeno_pole, index) \
+        (index >= bitarray_size(jmeno_pole)) ? \
+        (error_exit("bitarray_getbit: Index %lu mimo rozsah 0..%lu",(unsigned long)(index),\
+        (unsigned long) (bitarray_size(jmeno_pole)-1)),0): 0 \
+        (jmeno_pole[((index)/(sizeof(unsigned long) * CHAR_BIT)) + 1] & \
+        (1UL << ((index) % (sizeof(unsigned long) * CHAR_BIT)))) != 0
 
 #else
 //pokud je definovany no check
-#define bitarray_getbit(jmeno_pole, index) \
-    (jmeno_pole[((index)/(sizeof(unsigned long) * CHAR_BIT)) + 1] & \
-    (1UL << ((index) % (sizeof(unsigned long) * CHAR_BIT)))) != 0
+    #define bitarray_getbit(jmeno_pole, index) \
+        (jmeno_pole[((index)/(sizeof(unsigned long) * CHAR_BIT)) + 1] & \
+        (1UL << ((index) % (sizeof(unsigned long) * CHAR_BIT)))) != 0
 
-#endif
+#endif //konec NO_CHECK
 
-#endif
+#endif //konec INLINE rozvetveni
+
+#endif //konec BITARRAY_H
