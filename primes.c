@@ -11,15 +11,15 @@ extern inline int bitarray_getbit(bitarray_t jmeno_pole, bitarray_index_t index)
 
 void Eratosthenes(bitarray_t pole);
 
-
+#define HRANICE 444000000
 int main() {
     clock_t start = clock();
-    bitarray_create(pole, 100);
+    bitarray_create(pole,HRANICE);
     Eratosthenes(pole);
     unsigned long nalezena_prvocisla[10];
     int pocet = 0;
     
-    for(unsigned long i = 99; i>0;i--) {
+    for(unsigned long i = HRANICE-1; i>0;i--) {
         if(bitarray_getbit(pole,i)) {
             nalezena_prvocisla[pocet] = i;
             pocet++;
