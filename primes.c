@@ -2,6 +2,13 @@
 #include "bitarray.h"
 #include <time.h>
 
+#ifdef USE_INLINE
+extern inline unsigned long bitarray_size(bitarray_t jmeno_pole);
+extern inline void bitarray_fill(bitarray_t jmeno_pole, int bool_vyraz);
+extern inline void bitarray_setbit(bitarray_t jmeno_pole, bitarray_index_t index, int bool_vyraz);
+extern inline int bitarray_getbit(bitarray_t jmeno_pole, bitarray_index_t index);
+#endif
+
 void Eratosthenes(bitarray_t pole);
 
 

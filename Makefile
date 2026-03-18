@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -g -std=c11 -pedantic -Wall -Wextra
 
-all: primes primes-i no-comment
+all: primes primes-i
 
 no-comment: no-comment.o error.o
 	$(CC) $(CFLAGS) -o no-comment no-comment.o error.o
