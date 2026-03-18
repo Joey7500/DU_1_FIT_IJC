@@ -7,6 +7,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include "error.h"
 
 
 typedef unsigned long bitarray_t[];
@@ -47,7 +48,7 @@ inline void bitarray_fill(bitarray_t jmeno_pole, int bool_vyraz) {
             jmeno_pole[i] = ULONG_MAX;
         }
         else {
-            jmeo_pole[i] = 0UL;
+            jmeno_pole[i] = 0UL;
         }
     }
 }
@@ -92,7 +93,7 @@ inline int bitarray_getbit(bitarray_t jmeno_pole, bitarray_index_t index) {
     do { \
         unsigned long _pocet_bunek = BITARRAY_BLOCKS(bitarray_size(jmeno_pole)); \
         for (unsigned long _i = 1; _i <= _pocet_bunek ;_i++){ \
-            jmeno_pole[_i] = (bool_vyraz) ? ULONG_MAX : 0UL \
+            jmeno_pole[_i] = (bool_vyraz) ? ULONG_MAX : 0UL; \
         }\
     } while(0)
 
