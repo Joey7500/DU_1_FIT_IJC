@@ -43,7 +43,7 @@ inline unsigned long bitarray_size(bitarray_t jmeno_pole){
     }
 inline void bitarray_fill(bitarray_t jmeno_pole, int bool_vyraz) {
     unsigned long pocet_bunek = BITARRAY_BLOCKS(bitarray_size(jmeno_pole));
-    for(unsigned long i = 1; i<=pocet_bunek; i++) {
+    for(unsigned long i = 1; i < pocet_bunek; i++) {
         if(bool_vyraz) {
             jmeno_pole[i] = ULONG_MAX;
         }
@@ -92,7 +92,7 @@ inline int bitarray_getbit(bitarray_t jmeno_pole, bitarray_index_t index) {
 #define bitarray_fill(jmeno_pole, bool_vyraz) \
     do { \
         unsigned long _pocet_bunek = BITARRAY_BLOCKS(bitarray_size(jmeno_pole)); \
-        for (unsigned long _i = 1; _i <= _pocet_bunek ;_i++){ \
+        for (unsigned long _i = 1; _i < _pocet_bunek ;_i++){ \
             jmeno_pole[_i] = (bool_vyraz) ? ULONG_MAX : 0UL; \
         }\
     } while(0)
