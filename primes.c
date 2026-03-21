@@ -2,7 +2,7 @@
 // Řešení IJC-DU1, příklad a), 21.03. 2026
 // Autor: Josef Hruska, FSI
 // Přeloženo: gcc 14.2.0
-//Popis: Hlavni program pro vypocet a tisk poslednich 10 prvocisel do limitu 444 milionu.
+// Popis: Hlavni program pro vypocet a tisk poslednich 10 prvocisel do limitu 444 milionu.
 //        Vyuziva Eratosthenovo sito nad bitovym polem a meri dobu behu vypoctu.
 // Omezeni: Kvuli velikosti lokalniho pole vyzaduje pred spustenim zvetseni limitu zasobniku (napr. ulimit -s 60000).
 
