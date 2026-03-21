@@ -1,3 +1,10 @@
+// no-comment.c
+// Řešení IJC-DU1, příklad b), 21.3.2026
+// Autor: Josef Hruska, FSI
+// Přeloženo: gcc 14.2.0
+// Popis: Stavovy automat pro odstranovani komentaru ze zdrojoveho kódu jazyka C.
+// Poznamky: Předpoklada syntakticky korektni vstupni kod. Pro detekci presmerovani souboru jsou pouzity POSIX funkce fstat a fileno (vyzaduje makro _POSIX_C_SOURCE).
+
 #define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>

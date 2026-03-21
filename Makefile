@@ -1,3 +1,8 @@
+# Makefile
+# Řešení IJC-DU1, 21.3.2026
+# Autor: Josef Hruska, FSI
+# Popis: Pravidla pro překlad programů primes a no-comment
+
 CC = gcc
 CFLAGS = -g -std=c11 -pedantic -Wall -Wextra
 
@@ -32,3 +37,6 @@ eratosthenes-i.o: eratosthenes.c
 
 run: primes primes-i
 	ulimit -s 60000; ./primes ; ./primes-i
+
+clean:
+	rm -f *.o primes primes-i no-comment

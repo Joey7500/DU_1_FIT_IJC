@@ -1,3 +1,10 @@
+
+// error.c
+// Řešení IJC-DU1, příklad b), 21.3.2026
+// Autor: Josef Hruska, FSI
+// Přeloženo: gcc 14.2.0
+// Popis: Modul pro tisk chybových hlášení (warning, error_exit) s variabilním počtem argumentů. Využívá hlavičku <stdarg.h>
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>

@@ -1,4 +1,11 @@
-#ifndef BITARRAY_H //aby se to nedelalo vicekrat kdyz uz to existuje a nerval po me compiler
+// bitarray.h
+// Řešení IJC-DU1, příklad a), 21.03. 2026
+// Autor: Josef Hruska, FSI
+// Přeloženo: gcc 14.2.0
+// Popis: rozhrani maker, inline funkci v bitovem poli pro eratosthenovo sito
+
+
+#ifndef BITARRAY_H //aby se to nedelalo vicekrat kdyz uz to existuje
 #define BITARRAY_H
 
 #include <stdio.h>

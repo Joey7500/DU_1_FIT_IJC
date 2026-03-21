@@ -1,3 +1,10 @@
+// eratosthenes.c
+// Řešení IJC-DU1, příklad a), 21.3.2026
+// Autor: Josef Hruska, FSI
+// Přeloženo: gcc 14.2.0
+// Popis: Samotna implementace algoritmu Eratosthenova sita
+// Omezení: Pro velká lokální pole vyžaduje zvětšení limitu zásobníku (ulimit -s).
+
 #include <stdio.h>
 #include "bitarray.h"
 #include <math.h>
