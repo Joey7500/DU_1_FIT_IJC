@@ -1,10 +1,13 @@
 CC = gcc
 CFLAGS = -g -std=c11 -pedantic -Wall -Wextra
 
-all: primes primes-i
+all: primes primes-i no-comment
 
 no-comment: no-comment.o error.o
 	$(CC) $(CFLAGS) -o no-comment no-comment.o error.o
+
+no-comment.o: no-comment.c
+	$(CC) $(CFLAGS) -c no-comment.c -o no-comment.o
 
 error.o: error.c
 	$(CC) $(CFLAGS) -c error.c -o error.o

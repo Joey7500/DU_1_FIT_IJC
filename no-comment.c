@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -21,19 +22,19 @@ int main(int argc, char *argv[]) {
     FILE *vstup = stdin;
     if (argc > 1) {
         vstup = fopen(argv[1] , "r");
-        if (vstup == NULL) {
-            error_exit("Chyba: Soubor %s se nepodarilo otevrit.\n", argv[1]);
-        }
-        struct stat stat_vstup, stat_vystup;
-        fstat(fileno(vstup),&stat_vstup);
-        fstat(fileno(stdout), &stat_vystup);
+            if (vstup == NULL) {
+                error_exit("Chyba: Soubor %s se nepodarilo otevrit.\n", argv[1]); //snad ho smaze
+            }
+            struct stat stat_vstup, stat_vystup;
+            fstat(fileno(vstup),&stat_vstup);
+            fstat(fileno(stdout), &stat_vystup);
         
-        if(stat_vstup.st_ino == stat_vystup.st_ino && stat_vstup.st_dev == stat_vystup.st_dev ) {
-            error_exit("Chyba: Soubor vstupni a vystupni soubor se shoduji");
+            if(stat_vstup.st_ino == stat_vystup.st_ino && stat_vstup.st_dev == stat_vystup.st_dev ) {
+                error_exit("Chyba: Soubor vstupni a vystupni soubor se shoduji");
+            }
         }
-
         int c;
-        stav_automatu_t aktualni_stav = NORMAL;
+        stav_automatu_t aktualni_stav = NORMAL; /*doufam ze smaze i tento*/
 
         while ((c = fgetc(vstup)) != EOF) {
             switch(aktualni_stav) {
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]) {
                 else {aktualni_stav = NORMAL; putchar('/'); putchar(c); }
                 break;
 
-                case LINE_COMMENT: if (c =='\n' ) {aktualni_stav = NORMAL; putchar('\n'); }
+                case LINE_COMMENT: if (c =='\n' ) {aktualni_stav = NORMAL; putchar(c); }
                 else if (c == '\\') {aktualni_stav = LINE_COMMENT_ESCAPE; }
                 else {aktualni_stav = LINE_COMMENT; }
                 break;
@@ -66,26 +67,32 @@ int main(int argc, char *argv[]) {
                 else {aktualni_stav = BLOCK_COMMENT; }
                 break;
 
-                case STRING: if (c == '\') {aktualni_stav = STRING_ESCAPE; putchar(c) ;}
-                else if (c == "\"") {aktualni_stav = NORMAL; putchar(c); }
+                case STRING: if (c == '\\') {aktualni_stav = STRING_ESCAPE; putchar(c) ;}
+                else if (c == '\"') {aktualni_stav = NORMAL; putchar(c); }
                 else {aktualni_stav = STRING; putchar(c); }
                 break;
 
-                case STRING_ESCAPE: if ()
+                case STRING_ESCAPE: {aktualni_stav = STRING; putchar(c); }
                 break;
 
-                case CHAR:
+                case CHAR: if (c == '\\') {aktualni_stav = CHAR_ESCAPE; putchar(c); }
+                else if (c == '\'') {aktualni_stav = NORMAL; putchar(c); }
+                else {aktualni_stav = CHAR; putchar(c); }
                 break;
 
-                case CHAR_ESCAPE:
-                break;
-
-
-
-                
+                case CHAR_ESCAPE: {aktualni_stav = CHAR; putchar(c); }
+                break;                
                 }
             }
+        
+        if (aktualni_stav == SLASH) {
+        putchar('/');
+        aktualni_stav = NORMAL;
         }
-    }
+
+        if (aktualni_stav != NORMAL && aktualni_stav != LINE_COMMENT) {
+        error_exit("Chyba: Neukoncena poznamka nebo retezec na konci souboru.\n");
+        }
+    
     return 0;
 }
