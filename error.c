@@ -1,4 +1,3 @@
-
 // error.c
 // Řešení IJC-DU1, příklad b), 21.3.2026
 // Autor: Josef Hruska, FSI
